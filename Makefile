@@ -1,7 +1,22 @@
-all: build
+.PHONY: all push
 
-build:
-	@docker build --tag=sameersbn/ubuntu:latest .
+USER="501stalpha1"
+ifeq ($(shell uname -m), i686)
+  PLATFORM="386"
+else
+  PLATFORM="amd64"
+endif
+VERSION="trusty-sameersbn"
 
-release: build
-	@docker build --tag=sameersbn/ubuntu:$(shell cat VERSION) .
+all: .last-docker-build
+
+.last-docker-build: Dockerfile
+	docker build -t "$(USER)/ubuntu:$(VERSION)-$(PLATFORM)" .
+	@touch $@
+
+push: .last-docker-push
+
+.last-docker-push: .last-docker-build
+	docker push "$(USER)/ubuntu:$(VERSION)-$(PLATFORM)"
+	manifest-tool push from-spec ./manifest.yml --ignore-missing
+	@touch $@

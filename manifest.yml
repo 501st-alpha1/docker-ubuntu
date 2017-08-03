@@ -1,0 +1,12 @@
+image: 501stalpha1/ubuntu:trusty-sameersbn
+manifests:
+  -
+    image: 501stalpha1/ubuntu:trusty-sameersbn-amd64
+    platform:
+      architecture: amd64
+      os: linux
+  -
+    image: 501stalpha1/ubuntu:trusty-sameersbn-386
+    platform:
+      architecture: 386
+      os: linux
